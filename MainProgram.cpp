@@ -30,14 +30,17 @@ private:
 
 public:
     // Constructor: initialize with a Celsius value.
+   
     // Must enforce the invariant.
-    // Throw std::invalid_argument if value < -273.15
-    explicit Temperature(double celsius) {
+    // Throw invalid_argument if value < -273.15
+  
+    explicit Temperature(double celsius) {  if (celsius < -273.15) throw invalid_argument("Tempature cannot be below absolute zero");
         // TODO: Validate and set celsius_
     }
 
     // Getter: return the temperature in Celsius
     double getCelsius() const {
+        
         // TODO: Implement
         return 0.0;
     }
@@ -46,13 +49,15 @@ public:
     // Formula: F = C * 9/5 + 32
     double getFahrenheit() const {
         // TODO: Implement
-        return 0.0;
+        return (celsius_  * 9.0 / 5.0 +32.0);
     }
 
     // Setter: update the temperature in Celsius
     // Must enforce the invariant.
     // Throw std::invalid_argument if value < -273.15
-    void setCelsius(double celsius) {
+    void setCelsius(double celsius) {    if (celsius < -273.15) throw invalid_argument
+    ("Tempature cannot be below absolute zero");
+    celsius_=celsius;
         // TODO: Implement
     }
 };
@@ -74,24 +79,34 @@ public:
     // Throw std::invalid_argument if owner is empty or balance < 0
     BankAccount(const string& owner, double initialBalance) {
         // TODO: Validate and set members
+        if(owner.empty()){ 
+            throw invalid_argument("Owner name cannot be mepty");
+        }
+        if(initialBalance < 0){
+             throw invalid_argument ("Initial Balance cannot be negative");
+        }
+    
+        owner_ =owner;
+        balance_=initialBalance;
     }
 
     // Getter: return the owner's name
     string getOwner() const {
         // TODO: Implement
-        return "";
+        return owner_;
     }
 
     // Getter: return the current balance
     double getBalance() const {
         // TODO: Implement
-        return 0.0;
+        return balance_;
     }
 
     // Deposit money into the account.
     // Throw std::invalid_argument if amount <= 0
     void deposit(double amount) {
-        // TODO: Implement
+        // TODO: Implement  
+        balance_+=amount;
     }
 
     // Withdraw money from the account.
@@ -99,6 +114,15 @@ public:
     // Throw std::runtime_error if insufficient funds
     void withdraw(double amount) {
         // TODO: Implement
+         if (amount <= 0){
+             throw invalid_argument("Withdrawl amount must be positive");
+         }
+         if (amount > balance_){
+             throw runtime_error("insufficient funds");
+         }
+         
+            balance_-=amount;
+      
     }
 
     // Transfer money from this account to another.
@@ -106,6 +130,8 @@ public:
     // Throw std::runtime_error if insufficient funds
     void transfer(BankAccount& other, double amount) {
         // TODO: Implement using withdraw() and deposit()
+        if (amount <= 0)
+            throw invalid_argument("Transfer amount must be positive");
     }
 };
 
@@ -122,13 +148,30 @@ private:
 
     // Helper: check if a string contains at least one digit
     static bool hasDigit(const string& s) {
-        // TODO: Implement
+      for (char c : s) {
+            if (c >= '0' && c <='9') {
+                return true;
+            }
+        }
         return false;
-    }
+    }  // TODO: Implement
+       
+        
+        
+        
 
     // Helper: validate password against all rules
     static void validate(const string& pwd) {
-        // TODO: Check length >= 8 and hasDigit
+      if (pwd.length() < 8) {
+            throw invalid_argument("Password must be at least 8 charachter ");
+        }
+        if (!hasDigit(pwd)) {
+            throw invalid_argument("Password mustr contain at least one digit ");
+            
+            
+            
+        }   
+            // TODO: Check length >= 8 and hasDigit
         // Throw std::invalid_argument with descriptive message if invalid
     }
 
